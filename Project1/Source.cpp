@@ -21,16 +21,15 @@ int main()
 
 	if (inFile.fail())
 	{
-		cout << "Erorr while opening file!!!" << endl;
+		cerr << "Erorr while opening file!!!" << endl; // I change the cout with cerr because cerr used specifically for error messages or alerts. Since it is unbuffered, it is immediately printed to the console or log, which is important when debugging or handling errors.
 		return 1;
 
 	}
 
-	char c;
-
-	while (inFile.get(c))
+	char a;
+	while (inFile.get(a))
 	{
-		cout << c;
+		cout << "Read char:" << a << endl;  //A way to read every char one by one and visualize it
 	}
 
 	inFile.close();
