@@ -26,16 +26,22 @@ int main()
 
 	}
 
-	char a;
-	while (inFile.get(a))
+	int row = 0;
+	int col = 0;
+
+
+	int a;
+	while (inFile >> a)
 	{
-		if (a == "a")
+		if (row != 0)
 		{
+			col = a;
 			break;
 		}
-		cout << "Read char:" << a << endl;  //A way to read every char one by one and visualize it
+		row = a;
 	}
 
+	cout << "Row=" << row << "   Col=" << col << endl;
 
 
 	inFile.close();
