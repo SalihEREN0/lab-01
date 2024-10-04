@@ -29,8 +29,14 @@ int main()
 	char a;
 	while (inFile.get(a))
 	{
+		if (a == "a")
+		{
+			break;
+		}
 		cout << "Read char:" << a << endl;  //A way to read every char one by one and visualize it
 	}
+
+
 
 	inFile.close();
 
