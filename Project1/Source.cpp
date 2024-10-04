@@ -10,6 +10,9 @@ using namespace std;
 
 int main()
 {
+	int i = 0;
+	int j = 0;
+
 	string filename;
 
 	cout << "Enter the filename: ";
@@ -41,7 +44,32 @@ int main()
 		row = a;
 	}
 
-	cout << "Row=" << row << "   Col=" << col << endl;
+	char** blobArray = new char* [row+1];
+	for (int i = 0; i < row; i++) {
+		blobArray[i] = new char[col];
+	}
+
+
+	vector<vector<char>> array(row, vector<char>(col));
+
+	for (int i = 0; i < row; ++i)
+	{
+		for (int j = 0; j < col; ++j)
+		{
+			inFile.get(array[i][j]);  // After long researches i found the way to copy the text file thanks to .ignore
+		}
+		inFile.ignore();  // :)
+	}
+
+
+	for (int i = 0; i < row; ++i)
+	{
+		for (int j = 0; j < col; ++j)
+		{
+			cout << array[i][j] << " ";
+		}
+		cout << endl;
+	}
 
 
 	inFile.close();
