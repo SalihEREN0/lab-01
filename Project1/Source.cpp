@@ -8,6 +8,10 @@
 using namespace std;
 
 
+void printTable(vector<vector<char>> array, int row, int col);
+
+
+
 int main()
 {
 	int i = 0;
@@ -44,7 +48,8 @@ int main()
 		row = a;
 	}
 
-	char** blobArray = new char* [row+1];
+	cout << "Row=" << row << "   Col=" << col << endl;
+	char** blobArray = new char* [row + 1];
 	for (int i = 0; i < row; i++) {
 		blobArray[i] = new char[col];
 	}
@@ -54,26 +59,91 @@ int main()
 
 	for (int i = 0; i < row; ++i)
 	{
+        inFile.ignore();  // :)
+
 		for (int j = 0; j < col; ++j)
 		{
 			inFile.get(array[i][j]);  // After long researches i found the way to copy the text file thanks to .ignore
 		}
-		inFile.ignore();  // :)
+		
 	}
 
+	printTable(array, row, col); //prints the blobs
 
-	for (int i = 0; i < row; ++i)
-	{
-		for (int j = 0; j < col; ++j)
-		{
-			cout << array[i][j] << " ";
-		}
-		cout << endl;
-	}
-
-
-	inFile.close();
 
 
 	return 0;
+
+}
+
+
+
+void printTable(vector<vector<char>> array, int row, int col)
+{
+	int count = 0;
+
+	cout << "  ";
+	for (int i = 0; i < col; i++)
+	{
+		cout << count;
+		count++;
+		if (count % 10 == 0)
+		{
+			count = 0;
+		}
+	}
+
+	cout << endl << " +";
+	for (int i = 0; i < col; i++)
+	{
+		cout << "-";
+	}
+	cout << "+" << endl;
+
+
+
+	count = 0;
+
+	for (int i = 0; i < row; i++)
+	{
+
+		if (count % 10 == 0)
+		{
+			count = 0;
+		}
+
+		cout << count  << "|";
+
+		for (int j = 0; j < col; j++)
+		{
+			cout << array[i][j];
+		}
+
+		cout << "|" << count ;
+
+		count++;
+
+		cout << endl;
+	}
+
+	cout << " +";
+	for (int i = 0; i < col; i++)
+	{
+		cout << "-";
+	}
+	cout << "+" << endl;
+
+	count = 0;
+
+	cout << "  ";
+	for (int i = 0; i < col; i++)
+	{
+		cout << count;
+		count++;
+		if (count % 10 == 0)
+		{
+			count = 0;
+		}
+	}
+	cout << "\n\n";
 }
