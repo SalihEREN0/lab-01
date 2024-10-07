@@ -11,11 +11,11 @@ using namespace std;
 struct Blob {
 	int id;
 	int pixels;
-	int comRow;
-	int comCol;
+	double comRow;
+	double comCol;
 };
 
-void printTable(vector<vector<char>> array, int row, int col);
+void printTable(vector<vector<char>> array, int row, int col); 
 void dfs(vector<vector<char>>& array, int row, int col, int blobId, int& pixels, double& comRow, double& comCol);
 void processBlobs(vector<vector<char>>& array, vector<Blob>& blobs);
 void printBlob(vector<Blob>blobs);
@@ -24,9 +24,6 @@ void printBlob(vector<Blob>blobs);
 
 int main()
 {
-	int i = 0;
-	int j = 0;
-
 	string filename;
 
 	cout << "Enter the filename: ";
@@ -48,7 +45,7 @@ int main()
 
 
 	int a;
-	while (inFile >> a)
+	while (inFile >> a)  //Inputs the rows and columns
 	{
 		if (row != 0)
 		{
@@ -58,9 +55,15 @@ int main()
 		row = a;
 	}
 
+	if (row == 0 || col == 0)
+	{
+		cerr << "Enter a valid file" <<endl;
+		return 1;
+	}
+
 	vector<vector<char>> array(row, vector<char>(col)); //char vector 
 
-	for (int i = 0; i < row; ++i)
+	for (int i = 0; i < row; ++i) // Text file to char vector
 	{
         inFile.ignore();  // :)
 
@@ -76,8 +79,8 @@ int main()
 	printTable(array, row, col); //prints the blobs
 
 	vector<Blob> blobs;
-	processBlobs(array, blobs);
-	printBlob(blobs);
+	processBlobs(array, blobs); // processes the array with depth first search algorithm 
+	printBlob(blobs);  // prints the blobs
 
 	return 0;
 
@@ -162,12 +165,11 @@ void dfs(vector<vector<char>>& array, int row, int col, int blobId, int& pixels,
 	{
 		return;
 	}
-	array[row][col] = blobId + '0'; // Mark the pixel as visited
+	array[row][col] = blobId + '0'; // marks as visited
 	pixels++;
 	comRow += row;
 	comCol += col;
 
-	// Recursively visit the neighbors
 	dfs(array, row - 1, col, blobId, pixels, comRow, comCol); // Up
 	dfs(array, row + 1, col, blobId, pixels, comRow, comCol); // Down
 	dfs(array, row, col - 1, blobId, pixels, comRow, comCol); // Left
@@ -210,11 +212,11 @@ void printBlob(vector<Blob>blobs)
 {
 	cout << fixed << setprecision(2);
 	cout << "+--------+--------------+-----------+--------------+" << endl; //8  14  11  14
-	cout << "|  Blob  |  NoOfPixels  |  CoM Row  |  Com Column  |" << endl;
+	cout << "|  Blob  |  NoOfPixels  |  CoM Row  |  CoM Column  |" << endl;
 	cout << "+--------+--------------+-----------+--------------+" << endl;
 	for (const auto& blob : blobs)
 	{
 		cout << "|" << setw(8) << blob.id << "|" << setw(14) << blob.pixels << "|" << setw(11) << blob.comRow << "|" << setw(14) << blob.comCol << "|" << endl;
 	}
-
+	cout << "+--------+--------------+-----------+--------------+" << endl;
 }
