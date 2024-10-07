@@ -8,7 +8,17 @@
 using namespace std;
 
 
+struct Blob {
+	int id;
+	int pixels;
+	int comRow;
+	int comCol;
+};
+
 void printTable(vector<vector<char>> array, int row, int col);
+void dfs(vector<vector<char>>& array, int row, int col, int blobId, int& pixels, double& comRow, double& comCol);
+void processBlobs(vector<vector<char>>& array, vector<Blob>& blobs);
+void printBlob(vector<Blob>blobs);
 
 
 
@@ -48,14 +58,7 @@ int main()
 		row = a;
 	}
 
-	cout << "Row=" << row << "   Col=" << col << endl;
-	char** blobArray = new char* [row + 1];
-	for (int i = 0; i < row; i++) {
-		blobArray[i] = new char[col];
-	}
-
-
-	vector<vector<char>> array(row, vector<char>(col));
+	vector<vector<char>> array(row, vector<char>(col)); //char vector 
 
 	for (int i = 0; i < row; ++i)
 	{
@@ -68,9 +71,13 @@ int main()
 		
 	}
 
+	inFile.close();   //closes the file
+
 	printTable(array, row, col); //prints the blobs
 
-
+	vector<Blob> blobs;
+	processBlobs(array, blobs);
+	printBlob(blobs);
 
 	return 0;
 
@@ -146,4 +153,68 @@ void printTable(vector<vector<char>> array, int row, int col)
 		}
 	}
 	cout << "\n\n";
+}
+
+
+void dfs(vector<vector<char>>& array, int row, int col, int blobId, int& pixels, double& comRow, double& comCol)
+{
+	if (row < 0 || row >= array.size() || col < 0 || col >= array[0].size() || array[row][col] != 'x')
+	{
+		return;
+	}
+	array[row][col] = blobId + '0'; // Mark the pixel as visited
+	pixels++;
+	comRow += row;
+	comCol += col;
+
+	// Recursively visit the neighbors
+	dfs(array, row - 1, col, blobId, pixels, comRow, comCol); // Up
+	dfs(array, row + 1, col, blobId, pixels, comRow, comCol); // Down
+	dfs(array, row, col - 1, blobId, pixels, comRow, comCol); // Left
+	dfs(array, row, col + 1, blobId, pixels, comRow, comCol); // Right
+
+}
+
+
+void processBlobs(vector<vector<char>>& array, vector<Blob>& blobs)
+{
+	int blobId = 1;
+
+	for (int i = 0; i < array.size(); i++)
+	{
+		for (int j = 0; j < array[0].size(); j++)
+		{
+			if (array[i][j] == 'x')
+			{
+				int pixels = 0;
+				double comRow = 0.0;
+				double comCol = 0.0;
+
+				dfs(array, i, j, blobId, pixels, comRow, comCol);
+
+				Blob blob;
+				blob.id = blobId;
+				blob.pixels = pixels;
+				blob.comRow = comRow / pixels;
+				blob.comCol = comCol / pixels;
+
+				blobs.push_back(blob);
+				blobId++;
+			}
+		}
+	}
+}
+
+
+void printBlob(vector<Blob>blobs)
+{
+	cout << fixed << setprecision(2);
+	cout << "+--------+--------------+-----------+--------------+" << endl; //8  14  11  14
+	cout << "|  Blob  |  NoOfPixels  |  CoM Row  |  Com Column  |" << endl;
+	cout << "+--------+--------------+-----------+--------------+" << endl;
+	for (const auto& blob : blobs)
+	{
+		cout << "|" << setw(8) << blob.id << "|" << setw(14) << blob.pixels << "|" << setw(11) << blob.comRow << "|" << setw(14) << blob.comCol << "|" << endl;
+	}
+
 }
